@@ -195,3 +195,37 @@ export const themeSettings = (mode) => {
 };
 
 //React context for color mode
+/**
+ * createContext is a function from React that creares a context object. A context provides a way to pass data through the component tree
+ * without having to pass props down manually at every level
+ * 
+ * toggleColorMode is the default value
+ */
+export const ColorModeContext = createContext({
+    toggleColorMode: ()=> {}
+})
+
+/**
+ * 
+ * useMemo is used to memoizethe result of the function provided to it, preventing unnecessary recalculations
+ * The empty array as the second argument, means this memoized value will only reclaculated if the dependencies change, 
+ * in this case, It will only be set once
+ */
+export const useMode = () => {
+    const [mode,setMode] = useState("dark");
+
+    const colorMode = useMemo(
+        () => ({
+            toggleColorMode: () =>
+                setMode((prev) => (prev === "light" ? "dark" : "light"))
+        }), []
+    );
+    /**
+     * This line initialize the theme, using useMemo to memoize the theme created by createTheme
+     * createTheme is a function from Material-UI that creates a theme based on the provided settings
+     * [mode]: This means that theme will be recalculated whenever mode changes.
+     */
+    const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
+
+    return [theme, colorMode];
+}
