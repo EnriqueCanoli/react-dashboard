@@ -12,6 +12,7 @@ import { Route, Routes } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import  Dashboard  from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
+import Users from "./scenes/users";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Topbar />
             <Routes>
               <Route path="/" element={<Dashboard />}/>
+              <Route path="/users" element={<Users />}/>
             </Routes>
           </main>
         </div>

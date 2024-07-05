@@ -18,16 +18,16 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
 
-const Item = ({title, to, icon, selected, setSelected}) => {
+const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     /**
      * active: marks selected MenuItem. In this case dashboard
      */
-    return(
-        <MenuItem active={selected === title} style={{color: colors.grey[100]}} onClick={()=> setSelected(title)} icon={icon}>
+    return (
+        <MenuItem active={selected === title} style={{ color: colors.grey[100] }} onClick={() => setSelected(title)} icon={icon}>
             <Typography>{title}</Typography>
-            <Link to={to}/>
+            <Link to={to} />
         </MenuItem>
     )
 
@@ -65,7 +65,7 @@ const Sidebar = () => {
             {/**User */}
             <ProSidebar collapsed={isCollapsed}>
                 <Menu iconShape="square">
-                     {/** Burguer menu - <MenuOutlinedIcon /> collapsed - not collapses */}
+                    {/** Burguer menu - <MenuOutlinedIcon /> collapsed - not collapses */}
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -90,9 +90,9 @@ const Sidebar = () => {
                             </Box>
                         )}
                     </MenuItem>
-                    
 
-                     {/** User */}
+
+                    {/** User */}
                     {!isCollapsed && (
                         <Box mb="25px">
                             <Box display="flex" justifyContent="center" alignItems="center">
@@ -123,47 +123,53 @@ const Sidebar = () => {
 
 
                     {/** Menu options */}
-                    <Box paddingLeft={isCollapsed ? undefined:"10%"}>
-                        <Item 
+                    <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+                        <Item
                             title="Dashboard"
                             to="/"
                             icon={<HomeOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item 
+
+                        <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>Data</Typography>
+
+                        <Item
                             title="Manage users"
-                            to="/team"
+                            to="/users"
                             icon={<PeopleOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item 
+                        <Item
                             title="Groups"
                             to="/contacts"
                             icon={<ContactsOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item 
+                        <Item
                             title="Hobbies"
                             to="/invoices"
                             icon={<ReceiptOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item 
+
+                        <Typography variant="h6" color={colors.grey[300]} sx={{ m: "15px 0 5px 20px" }}>Chats</Typography>
+
+                        <Item
                             title="Bar Chart"
                             to="/bar"
                             icon={<BarChartOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
-                        <Item 
+                        <Item
                             title="Pie Chart"
                             to="/pie"
                             icon={<PieChartOutlineOutlinedIcon />}
-                            selected = {selected}
+                            selected={selected}
                             setSelected={setSelected}
                         />
                     </Box>
