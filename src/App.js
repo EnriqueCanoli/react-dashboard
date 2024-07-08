@@ -13,6 +13,7 @@ import Topbar from "./scenes/global/Topbar";
 import  Dashboard  from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
 import Users from "./scenes/users";
+import Hobbies from "./scenes/hobbies";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />}/>
               <Route path="/users" element={<Users />}/>
+              <Route path="/hobbies" element={<Hobbies />}/>
             </Routes>
           </main>
         </div>
