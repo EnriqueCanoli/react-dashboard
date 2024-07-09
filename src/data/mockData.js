@@ -322,7 +322,7 @@ export const mockBarData = [
         country: "AD",
         "hot dog": 137,
         "hot dogColor": "hsl(229, 70%, 50%)",
-        burger: 96,
+        burger: 6,
         burgerColor: "hsl(296, 70%, 50%)",
         kebab: 72,
         kebabColor: "hsl(97, 70%, 50%)",

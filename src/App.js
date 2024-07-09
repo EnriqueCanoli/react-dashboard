@@ -14,6 +14,8 @@ import  Dashboard  from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
 import Users from "./scenes/users";
 import Hobbies from "./scenes/hobbies";
+import Bar from "./scenes/bar";
+import Form from "./scenes/form/inde";
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
               <Route path="/" element={<Dashboard />}/>
               <Route path="/users" element={<Users />}/>
               <Route path="/hobbies" element={<Hobbies />}/>
+              <Route path="/bar" element={<Bar />}/>
+              <Route path="/form" element={<Form />}/>
             </Routes>
           </main>
         </div>
@@ -41,3 +45,4 @@ function App() {
 }
 
 export default App;
+

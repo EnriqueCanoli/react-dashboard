@@ -1,15 +1,22 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material/styles"; // Correct import
 import { tokens } from "../../theme";
 import { DataGrid } from "@mui/x-data-grid";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import ModalAdd from "../../components/ModalAdd";
 
 const Hobbies = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    /**Modal states */
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    /**Hobbies state */
     const [hobbies, setHobbies] = useState([]);
 
     const columns = [
@@ -73,7 +80,13 @@ const Hobbies = () => {
 
     ];
 
-    useEffect(() => {
+    useEffect(() => {/*
+        fetch('https://cors-anywhere.herokuapp.com/https://backend-hobbify.onrender.com/hobbies')
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));*/
+
+
         setHobbies([
             { hobbieId: 3, name: "Football", emoji: "⚽️" },
             { hobbieId: 4, name: "Playing Guitar", emoji: "🎸" },
@@ -99,6 +112,7 @@ const Hobbies = () => {
                 justifyContent="center"
                 backgroundColor={colors.greenAccent[600]}
                 borderRadius="4px"
+                onClick={handleOpen}
             >
                 <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
                     ADD hobbie
@@ -137,8 +151,13 @@ const Hobbies = () => {
                     getRowId={(row) => row.hobbieId}
                 />
             </Box>
+            <ModalAdd handleClose={handleClose} open={open} />
         </Box>
     );
 };
+
+
+
+
 
 export default Hobbies;
