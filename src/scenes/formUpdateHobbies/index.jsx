@@ -4,11 +4,9 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
+import { useEffect } from "react";
 
-const initialValues = {
-    name: "",
-    emoji: ""
-};
+
 
 const validationSchema = yup.object().shape({
     name: yup.string().required("Required"),
@@ -16,48 +14,59 @@ const validationSchema = yup.object().shape({
 
 });
 
-const FormHobbies = ({ handleClose, setHobbies }) => {
+
+
+const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies }) => {
+    console.log(" name " + hobby.name +  " emohi " + hobby.emoji)
+
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    const initialValues = {
+        name: hobby.name || '',
+        emoji: hobby.emoji || '',
+    };
+    
+
     // Inside FormHobbies component, after successful POST request
     const handleFormSubmit = async (values) => {
-    try {
-        const response = await fetch('https://backend-hobbify.onrender.com/hobbies', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*'
-            },
-            body: JSON.stringify({
-                name: values.name,
-                emoji: values.emoji
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to create hobby');
+        try {
+            const response = await fetch(`https://backend-hobbify.onrender.com/hobbies/${hobby.hobbieId}`, {
+                method: 'PUT',
+                headers: {
+                    'accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: values.name,
+                    emoji: values.emoji
+                })
+            });
+    
+            if (response.ok) {
+                // Update the local state with the updated hobby
+                const updatedHobbies = hobbies.map(h =>
+                    h.hobbieId === hobby.hobbieId ? { ...h, name: values.name, emoji: values.emoji } : h
+                );
+                setHobbies(updatedHobbies);
+    
+                // Close the form or perform any other actions
+                handleClose();
+            } else {
+                console.error(`Failed to update hobby with ID ${hobby.hobbieId}:`, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
 
-        const newHobby = await response.json();
-
-        // Update hobbies state to include the new hobby
-        setHobbies(prevHobbies => [...prevHobbies, newHobby]);
-
-        // Close the form or perform any other actions
-        handleClose();
-    } catch (error) {
-        console.error('Error creating hobby:', error);
-        // Handle error state if needed
-    }
-};
+    };
 
 
     return (
         <Box m="20px">
-            <Header title="CREATE HOBBIE" subtitle="Create a New Hobbie" />
+            <Header title="UPDATE HOBBIE" subtitle="Update a Hobbie" />
 
             <Formik
                 onSubmit={handleFormSubmit}
@@ -121,11 +130,11 @@ const FormHobbies = ({ handleClose, setHobbies }) => {
                                 backgroundColor={colors.greenAccent[600]}
                                 borderRadius="4px"
                                 onClick={handleSubmit}
-                                
+
                             >
-                        
+
                                 <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                                    Create Hobbie
+                                    Update Hobbie
                                 </Typography>
                             </Box>
 
@@ -140,7 +149,7 @@ const FormHobbies = ({ handleClose, setHobbies }) => {
                                 borderRadius="4px"
                                 onClick={handleClose}
                             >
-                        
+
                                 <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
                                     Cancel
                                 </Typography>
@@ -153,4 +162,4 @@ const FormHobbies = ({ handleClose, setHobbies }) => {
     );
 };
 
-export default FormHobbies;
+export default FormHobbiesUpdate;

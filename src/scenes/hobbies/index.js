@@ -6,6 +6,10 @@ import { tokens } from "../../theme";
 import { DataGrid } from "@mui/x-data-grid";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import ModalAdd from "../../components/ModalAdd";
+import ModalConfirm from "../ModalConfirm";
+import ModalDelete from "../ModalDelete";
+
+
 
 const Hobbies = () => {
     const theme = useTheme();
@@ -15,6 +19,40 @@ const Hobbies = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    /**Modal update */
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [hobby, setHobby] = useState({})
+
+    const handleOpenUpdate = (id) => {
+        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id); 
+        setOpenModalUpdate(true)
+        console.log("hobby: " + hobby.hobbieId)
+        setHobby(hobby)
+    }
+
+    const handleCloseUpdate = () => {
+        setOpenModalUpdate(false)
+        setHobby({})
+    }
+
+    /**Modal delete */
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+
+    const handleOpenDelete = (id) => {
+        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id); 
+        setOpenModalDelete(true)
+        console.log("hobby: " + hobby.hobbieId)
+        setHobby(hobby)
+    }
+
+    const handleCloseDelete = () => {
+        setOpenModalDelete(false)
+        setHobby({})
+    }
+
+    
+    
 
     /**Hobbies state */
     const [hobbies, setHobbies] = useState([]);
@@ -35,7 +73,7 @@ const Hobbies = () => {
             field: "update",
             headerName: "UPDATE",
             flex: 1,
-            renderCell: () => {
+            renderCell: (params) => {
                 return (
                     <Box
                         width="60%"
@@ -45,6 +83,7 @@ const Hobbies = () => {
                         justifyContent="center"
                         backgroundColor={colors.blueAccent[600]}
                         borderRadius="4px"
+                        onClick={()=>handleOpenUpdate(params.row.hobbieId)}
                     >
                         <SecurityOutlinedIcon />
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
@@ -58,7 +97,7 @@ const Hobbies = () => {
             field: "delete",
             headerName: "DELETE",
             flex: 1,
-            renderCell: () => {
+            renderCell: (params) => {
                 return (
                     <Box
                         width="60%"
@@ -68,6 +107,7 @@ const Hobbies = () => {
                         justifyContent="center"
                         backgroundColor={colors.redAccent[600]}
                         borderRadius="4px"
+                        onClick={()=>handleOpenDelete(params.row.hobbieId)}
                     >
                         <SecurityOutlinedIcon />
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
@@ -80,25 +120,16 @@ const Hobbies = () => {
 
     ];
 
-    useEffect(() => {/*
-        fetch('https://cors-anywhere.herokuapp.com/https://backend-hobbify.onrender.com/hobbies')
+    useEffect(() => {
+        fetch('https://backend-hobbify.onrender.com/hobbies')
             .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));*/
+            .then(data => {
+                console.log(data)
+                setHobbies(data);
+            })
+            .catch(error => console.error('Error:', error));
 
-
-        setHobbies([
-            { hobbieId: 3, name: "Football", emoji: "⚽️" },
-            { hobbieId: 4, name: "Playing Guitar", emoji: "🎸" },
-            { hobbieId: 5, name: "Reading Books", emoji: "📚" },
-            { hobbieId: 6, name: "Gaming", emoji: "🎮" },
-            { hobbieId: 7, name: "Cooking", emoji: "🍳" },
-            { hobbieId: 8, name: "Painting", emoji: "🎨" },
-            { hobbieId: 9, name: "Fishing", emoji: "🎣" },
-            { hobbieId: 10, name: "Singing", emoji: "🎤" },
-            { hobbieId: 11, name: "Weightlifting", emoji: "🏋️‍♂️" },
-            { hobbieId: 12, name: "Cycling", emoji: "🚴‍♂️" }
-        ]);
+        
     }, []);
 
     return (
@@ -151,7 +182,9 @@ const Hobbies = () => {
                     getRowId={(row) => row.hobbieId}
                 />
             </Box>
-            <ModalAdd handleClose={handleClose} open={open} />
+            <ModalAdd handleClose={handleClose} open={open} setHobbies={setHobbies} />
+            <ModalConfirm handleClose={handleCloseUpdate} open={openModalUpdate} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  />
+            <ModalDelete handleClose={handleCloseDelete} open={openModalDelete} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  />
         </Box>
     );
 };
@@ -161,3 +194,19 @@ const Hobbies = () => {
 
 
 export default Hobbies;
+
+
+/*
+[
+            { hobbieId: 3, name: "Football", emoji: "⚽️" },
+            { hobbieId: 4, name: "Playing Guitar", emoji: "🎸" },
+            { hobbieId: 5, name: "Reading Books", emoji: "📚" },
+            { hobbieId: 6, name: "Gaming", emoji: "🎮" },
+            { hobbieId: 7, name: "Cooking", emoji: "🍳" },
+            { hobbieId: 8, name: "Painting", emoji: "🎨" },
+            { hobbieId: 9, name: "Fishing", emoji: "🎣" },
+            { hobbieId: 10, name: "Singing", emoji: "🎤" },
+            { hobbieId: 11, name: "Weightlifting", emoji: "🏋️‍♂️" },
+            { hobbieId: 12, name: "Cycling", emoji: "🚴‍♂️" }
+        ]
+*/
