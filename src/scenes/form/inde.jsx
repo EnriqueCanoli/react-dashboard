@@ -13,10 +13,10 @@ const initialValues = {
     confirmPassword: "",
     phone: "",
     country: "",
-    city: "",
+    city: ""
 };
 
-const phoneRegExp =  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const passwordRegExp = /^(?=.*\d)[A-Za-z\d]{8,}$/;
 
@@ -44,8 +44,37 @@ const checkoutSchema = yup.object().shape({
 const Form = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
-    const handleFormSubmit = (values) => {
+    const handleFormSubmit = async (values, {resetForm}) => {
         console.log(values);
+        try {
+            const response = await fetch('https://backend-hobbify.onrender.com/users/createAdmin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*'
+                },
+                body: JSON.stringify({
+                    username: values.username,
+                    email: values.email,
+                    password: values.password,
+                    confirmPassword: values.confirmPassword,
+                    phone: values.phone,
+                    country: values.country,
+                    city: values.city
+                })
+            })
+            if (!response.ok) {
+                throw new Error('Failed to create admin');
+            }else{
+                alert("Admin has been created")
+                resetForm();  
+            }
+        }
+        catch (error) {
+            console.error('Error creating hobby:', error);
+        }
+
+
     };
 
     return (
@@ -81,7 +110,7 @@ const Form = () => {
                                 label="Username"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={values.firstName}
+                                value={values.username}
                                 name="username"
                                 error={!!touched.username && !!errors.username}
                                 helperText={touched.username && errors.username}

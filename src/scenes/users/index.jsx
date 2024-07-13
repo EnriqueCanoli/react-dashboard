@@ -6,40 +6,79 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { useEffect, useState } from "react";
 
 const Users = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode)
 
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        fetch('https://backend-hobbify.onrender.com/users')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setUsers(data);
+            })
+            .catch(error => console.error('Error:', error));
+
+        
+    }, []);
+
     const columns = [
-        { field: "id", headerName: "ID" },
         {
-            field: "name",
-            headerName: "Name",
+            field: "username",
+            headerName: "USERNAME",
             flex: 1,
             cellClassName: "name-column--cell",
         },
         {
-            field: "age",
-            headerName: "Age",
-            type: "number",
+            field: "email",
+            headerName: "EMAIL",
             headerAlign: "left",
             align: "left",
+            flex: 2,
         },
         {
-            field: "phone",
-            headerName: "Phone Number",
+            field: "country",
+            headerName: "COUNTRY",
             flex: 1,
         },
         {
-            field: "email",
-            headerName: "Email",
+            field: "city",
+            headerName: "CITY",
             flex: 1,
+        },
+        {
+            field: "isAdmin",
+            headerName: "ADMIN",
+            flex: 1,
+            renderCell: ({value}) => {
+                return(
+                    <Typography color={value ? colors.greenAccent[600] : colors.blueAccent[300]}>
+                        {value ? 'ADMIN' : 'USER'}
+                    </Typography>
+                );
+            }
+        },
+        {
+            field: "isBanned",
+            headerName: "BANNED",
+            flex: 1,
+            renderCell: ({ value }) => {
+                return (
+                    <Typography color={value ? colors.redAccent[600] : colors.greenAccent[600] }>
+                        {value ? 'Banned' : 'Not Banned'}
+                    </Typography>
+                );
+            }
         },
         {
             field: "access",
             headerName: "Restrict",
-            flex: 1,
+            headerAlign: "center",
+            flex: 2,
             renderCell: ({ row: { access } }) => {
                 return (
                     <Box
@@ -91,7 +130,7 @@ const Users = () => {
                         color: `${colors.greenAccent[200]} !important`,
                     },
                 }}>
-                <DataGrid rows={mockDataTeam} columns={columns} />
+                <DataGrid rows={users} columns={columns} getRowId={(row) => row.userId} />
             </Box>
         </Box>
     )
