@@ -23,8 +23,51 @@ const Users = () => {
             })
             .catch(error => console.error('Error:', error));
 
-        
+
     }, []);
+
+    const handleBanned = async (userId) => {
+        const url = `https://backend-hobbify.onrender.com/users/${userId}/ban`;
+
+        //get the user
+        const user =  users.find((user) => user.userId === userId);
+        console.log("user found " + user)
+
+        
+        const data = {
+            ...user,
+            isBanned: true
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            alert(`User ${user.username} has been banned`)
+            setUsers((prevUsers) => 
+                prevUsers.map((u) => u.userId === userId ? {...u, isBanned:true} : u
+            ))
+
+            
+
+        } catch (error) {
+            console.error('Error banning user:', error);
+        }
+        
+
+    }
 
     const columns = [
         {
@@ -54,8 +97,8 @@ const Users = () => {
             field: "isAdmin",
             headerName: "ADMIN",
             flex: 1,
-            renderCell: ({value}) => {
-                return(
+            renderCell: ({ value }) => {
+                return (
                     <Typography color={value ? colors.greenAccent[600] : colors.blueAccent[300]}>
                         {value ? 'ADMIN' : 'USER'}
                     </Typography>
@@ -68,7 +111,7 @@ const Users = () => {
             flex: 1,
             renderCell: ({ value }) => {
                 return (
-                    <Typography color={value ? colors.redAccent[600] : colors.greenAccent[600] }>
+                    <Typography color={value ? colors.redAccent[600] : colors.greenAccent[600]}>
                         {value ? 'Banned' : 'Not Banned'}
                     </Typography>
                 );
@@ -79,7 +122,7 @@ const Users = () => {
             headerName: "Restrict",
             headerAlign: "center",
             flex: 2,
-            renderCell: ({ row: { access } }) => {
+            renderCell: (params) => {
                 return (
                     <Box
                         width="60%"
@@ -89,6 +132,7 @@ const Users = () => {
                         justifyContent="center"
                         backgroundColor={colors.greenAccent[600]}
                         borderRadius="4px"
+                        onClick={() => handleBanned(params.row.userId)}
                     >
                         <SecurityOutlinedIcon />
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
