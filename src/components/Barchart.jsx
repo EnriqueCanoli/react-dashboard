@@ -1,17 +1,47 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
-import { mockBarData as data } from "../data/mockData";
+import { useEffect, useState } from "react";
 
 const BarChart = ({ isDashboard = false }) => {
+    console.log("bar");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        fetch('https://backend-hobbify.onrender.com/users')
+            .then(response => response.json())
+            .then(data => {
+                console.log("users graph", data);
+                const userMap = {};
+                
+                data.forEach(user => {
+                    const country = user.country;
+                    if (userMap[country]) {
+                        userMap[country]++;
+                    } else {
+                        userMap[country] = 1;
+                    }
+                });
+
+                // Transform the data into an array of objects
+                const chartData = Object.keys(userMap).map(country => ({
+                    country,
+                    count: userMap[country]
+                }));
+
+                console.log(chartData);
+                setUsers(chartData);
+            })
+            .catch(error => console.error('Error:', error));
+    }, []);
+
     return (
         <ResponsiveBar
-            data={data}
+            data={users}
             theme={{
-                // added
                 axis: {
                     domain: {
                         line: {
@@ -39,13 +69,13 @@ const BarChart = ({ isDashboard = false }) => {
                     },
                 },
             }}
-            keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
+            keys={['count']}
             indexBy="country"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
             indexScale={{ type: "band", round: true }}
-            colors={{ scheme: "nivo" }}
+            colors={{ scheme: 'dark2'}}
             defs={[
                 {
                     id: "dots",
@@ -76,7 +106,7 @@ const BarChart = ({ isDashboard = false }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : "country", // changed
+                legend: isDashboard ? undefined : "country",
                 legendPosition: "middle",
                 legendOffset: 32,
             }}
@@ -84,7 +114,7 @@ const BarChart = ({ isDashboard = false }) => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: isDashboard ? undefined : "food", // changed
+                legend: isDashboard ? undefined : "count",
                 legendPosition: "middle",
                 legendOffset: -40,
             }}
