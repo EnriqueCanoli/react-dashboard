@@ -18,7 +18,7 @@ const BarChart = ({ isDashboard = false }) => {
                 const userMap = {};
                 
                 data.forEach(user => {
-                    const country = user.country;
+                    const country = user.country.toUpperCase();
                     if (userMap[country]) {
                         userMap[country]++;
                     } else {
