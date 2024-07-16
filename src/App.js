@@ -8,33 +8,47 @@
  */
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
-import  Dashboard  from "./scenes/dashboard";
+import Dashboard from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
 import Users from "./scenes/users";
 import Hobbies from "./scenes/hobbies";
 import Bar from "./scenes/bar";
 import Form from "./scenes/form/inde";
+import Login from "./scenes/login";
+import React, { useState, useEffect } from 'react';
 
 
 function App() {
   const [theme, colorMode] = useMode();
+  const [authenticated, setAuthenticated] = useState(null);
+
+  useEffect(() => {
+    // Check if user session exists in localStorage on component mount
+    if (typeof window !== "undefined" && window.localStorage) {
+      const userData = localStorage.getItem("userSession");
+      if (userData) {
+        setAuthenticated(JSON.parse(userData));
+      }
+    }
+  }, []);
 
   return (
     <ColorModeContext.Provider value={colorMode} >
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar />
+          {authenticated && <Sidebar authenticated={authenticated}/>}
           <main className="content">
-            <Topbar />
+            {authenticated && <Topbar setAuthenticated={setAuthenticated} />}
             <Routes>
-              <Route path="/" element={<Dashboard />}/>
-              <Route path="/users" element={<Users />}/>
-              <Route path="/hobbies" element={<Hobbies />}/>
-              <Route path="/bar" element={<Bar />}/>
-              <Route path="/form" element={<Form />}/>
+              <Route path="/" element={authenticated ? <Dashboard /> : <Navigate to="/login" />} />
+              <Route path="/users" element={authenticated ? <Users authenticated={authenticated} /> : <Navigate to="/login" />} />
+              <Route path="/hobbies" element={authenticated ? <Hobbies authenticated={authenticated}/> : <Navigate to="/login" />} />
+              <Route path="/bar" element={authenticated ? <Bar /> : <Navigate to="/login" />} />
+              <Route path="/form" element={authenticated ? <Form authenticated={authenticated}/> : <Navigate to="/login" />} />
+              <Route path="/login" element={!authenticated ? <Login setAuthenticated={setAuthenticated} /> : <Navigate to="/" />} />
             </Routes>
           </main>
         </div>
@@ -46,3 +60,13 @@ function App() {
 
 export default App;
 
+/*
+{
+  "username": "admin",
+  "email": "admin@mailFake.com",
+  "password": "Secure17$",
+  "confirmPassword": "Secure17$",
+  "phone": 57605,
+  "country": "Colombia",
+  "city": "Bogotá"
+}*/

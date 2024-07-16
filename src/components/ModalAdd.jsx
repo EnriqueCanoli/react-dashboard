@@ -1,7 +1,7 @@
 import { Box, Modal } from "@mui/material";
 import FormHobbies from "../scenes/hobbiesForm";
 
-const ModalAdd = ({ handleClose, open,setHobbies }) => {
+const ModalAdd = ({ handleClose, open,setHobbies,authenticated }) => {
     return (
         <Modal
             open={open}
@@ -17,7 +17,7 @@ const ModalAdd = ({ handleClose, open,setHobbies }) => {
                 boxShadow={24}
                 style={{ width: '80%', maxWidth: '600px' }}
             >
-                <FormHobbies handleClose={handleClose} setHobbies={setHobbies} />
+                <FormHobbies handleClose={handleClose} setHobbies={setHobbies}  authenticated={authenticated}/>
             </Box>
         </Modal>
     );

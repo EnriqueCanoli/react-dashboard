@@ -41,7 +41,7 @@ const checkoutSchema = yup.object().shape({
         .required('required'),
 });
 
-const Form = () => {
+const Form = ({authenticated}) => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const handleFormSubmit = async (values, {resetForm}) => {
@@ -51,7 +51,8 @@ const Form = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'accept': '*/*'
+                    'accept': '*/*',
+                    'Authorization': `Bearer ${authenticated.token}`
                 },
                 body: JSON.stringify({
                     username: values.username,

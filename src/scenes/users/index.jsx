@@ -1,21 +1,22 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 
-const Users = () => {
+const Users = ({ authenticated }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode)
 
     const [users, setUsers] = useState([]);
-
+    console.log("token " + authenticated.token)
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/users')
+        fetch('https://backend-hobbify.onrender.com/users',{
+            headers:{
+                'Authorization': `Bearer ${authenticated.token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -30,10 +31,10 @@ const Users = () => {
         const url = `https://backend-hobbify.onrender.com/users/${userId}/ban`;
 
         //get the user
-        const user =  users.find((user) => user.userId === userId);
+        const user = users.find((user) => user.userId === userId);
         console.log("user found " + user)
 
-        
+
         const data = {
             ...user,
             isBanned: true
@@ -44,7 +45,8 @@ const Users = () => {
                 method: 'PATCH',
                 headers: {
                     'Accept': '*/*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authenticated.token}`
                 },
                 body: JSON.stringify(data)
             });
@@ -52,20 +54,20 @@ const Users = () => {
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
             }
-            
-            const result = await response.json();
-            
-            alert(`User ${user.username} has been banned`)
-            setUsers((prevUsers) => 
-                prevUsers.map((u) => u.userId === userId ? {...u, isBanned:true} : u
-            ))
 
-            
+            const result = await response.json();
+
+            alert(`User ${user.username} has been banned`)
+            setUsers((prevUsers) =>
+                prevUsers.map((u) => u.userId === userId ? { ...u, isBanned: true } : u
+                ))
+
+
 
         } catch (error) {
             console.error('Error banning user:', error);
         }
-        
+
 
     }
 

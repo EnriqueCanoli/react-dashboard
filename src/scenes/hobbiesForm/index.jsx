@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
 
 });
 
-const FormHobbies = ({ handleClose, setHobbies }) => {
+const FormHobbies = ({ handleClose, setHobbies,authenticated }) => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const theme = useTheme();
@@ -29,7 +29,8 @@ const FormHobbies = ({ handleClose, setHobbies }) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'accept': '*/*'
+                'accept': '*/*',
+                'Authorization': `Bearer ${authenticated.token}`
             },
             body: JSON.stringify({
                 name: values.name,

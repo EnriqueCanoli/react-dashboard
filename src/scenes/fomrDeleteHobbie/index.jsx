@@ -9,7 +9,7 @@ import { tokens } from "../../theme";
 
 
 
-const FormHobbiesDelete = ({ handleClose, setHobbies, hobby, hobbies }) => {
+const FormHobbiesDelete = ({ handleClose, setHobbies, hobby, hobbies,authenticated }) => {
     console.log(" name " + hobby.name + " emohi " + hobby.emoji + "id: " + hobby.hobbieId)
 
     const theme = useTheme();
@@ -21,7 +21,8 @@ const FormHobbiesDelete = ({ handleClose, setHobbies, hobby, hobbies }) => {
             const response = await fetch(`https://backend-hobbify.onrender.com/hobbies/${hobby.hobbieId}`, {
                 method: 'DELETE',
                 headers: {
-                    'accept': '*/*'
+                    'accept': '*/*',
+                    'Authorization': `Bearer ${authenticated.token}`
                 }
             });
 

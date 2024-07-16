@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
 
 
 
-const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies }) => {
+const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies, authenticated }) => {
     console.log(" name " + hobby.name +  " emohi " + hobby.emoji)
 
     const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -37,7 +37,8 @@ const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies }) => {
                 method: 'PUT',
                 headers: {
                     'accept': '*/*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authenticated.token}`
                 },
                 body: JSON.stringify({
                     name: values.name,

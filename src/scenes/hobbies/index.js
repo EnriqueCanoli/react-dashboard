@@ -11,7 +11,8 @@ import ModalDelete from "../ModalDelete";
 
 
 
-const Hobbies = () => {
+const Hobbies = ({authenticated}) => {
+    console.log(authenticated.token)
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -121,7 +122,11 @@ const Hobbies = () => {
     ];
 
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/hobbies')
+        fetch('https://backend-hobbify.onrender.com/hobbies',{
+            headers:{
+                'Authorization': `Bearer ${authenticated.token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -182,9 +187,9 @@ const Hobbies = () => {
                     getRowId={(row) => row.hobbieId}
                 />
             </Box>
-            <ModalAdd handleClose={handleClose} open={open} setHobbies={setHobbies} />
-            <ModalConfirm handleClose={handleCloseUpdate} open={openModalUpdate} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  />
-            <ModalDelete handleClose={handleCloseDelete} open={openModalDelete} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  />
+            <ModalAdd handleClose={handleClose} open={open} setHobbies={setHobbies} authenticated={authenticated} />
+            <ModalConfirm handleClose={handleCloseUpdate} open={openModalUpdate} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated} />
+            <ModalDelete handleClose={handleCloseDelete} open={openModalDelete} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated}  />
         </Box>
     );
 };

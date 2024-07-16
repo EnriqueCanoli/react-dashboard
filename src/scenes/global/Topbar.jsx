@@ -8,8 +8,9 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import LogoutIcon from '@mui/icons-material/Logout';
 
-const Topbar = () => {
+const Topbar = ({setAuthenticated}) => {
     //This line uses the useTheme hook from Material-UI to access the current theme object
     const theme = useTheme();
     //check theme>themeSettings>pallete>mode
@@ -50,6 +51,13 @@ const Topbar = () => {
                 </IconButton>
                 <IconButton>
                     <PersonOutlinedIcon />
+                </IconButton>
+                <IconButton onClick={() => {
+                    localStorage.removeItem("userSession");
+                    setAuthenticated(null);
+
+                }}>
+                    <LogoutIcon />
                 </IconButton>
             </Box>
         </Box>

@@ -34,7 +34,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 }
 
-const Sidebar = () => {
+const Sidebar = ({authenticated}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -106,12 +106,14 @@ const Sidebar = () => {
                             </Box>
                             <Box textAlign="center">
                                 <Typography
-                                    variant="h2"
+                                    variant="h3"
                                     color={colors.grey[100]}
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    {/**Name input */}
+                                    
+                                    {authenticated?.userData.username.toUpperCase()}
+                                    
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
                                     Admin

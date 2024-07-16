@@ -4,38 +4,50 @@ import { tokens } from "../theme";
 import { useEffect, useState } from "react";
 
 const BarChart = ({ isDashboard = false }) => {
-    console.log("bar");
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/users')
-            .then(response => response.json())
-            .then(data => {
-                console.log("users graph", data);
-                const userMap = {};
-                
-                data.forEach(user => {
-                    const country = user.country.toUpperCase();
-                    if (userMap[country]) {
-                        userMap[country]++;
-                    } else {
-                        userMap[country] = 1;
+        // Check if user session exists in localStorage on component mount
+        if (typeof window !== "undefined" && window.localStorage) {
+            const userData = localStorage.getItem("userSession");
+            console.log("userData  " + JSON.parse(userData).token)
+            if (userData) {
+                fetch('https://backend-hobbify.onrender.com/users', {
+                    headers: {
+                        'Authorization': `Bearer ${JSON.parse(userData).token}`
                     }
-                });
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("users graph", data);
+                        const userMap = {};
+        
+                        data.forEach(user => {
+                            const country = user.country.toUpperCase();
+                            if (userMap[country]) {
+                                userMap[country]++;
+                            } else {
+                                userMap[country] = 1;
+                            }
+                        });
+        
+                        // Transform the data into an array of objects
+                        const chartData = Object.keys(userMap).map(country => ({
+                            country,
+                            count: userMap[country]
+                        }));
+        
+                        console.log(chartData);
+                        setUsers(chartData);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
 
-                // Transform the data into an array of objects
-                const chartData = Object.keys(userMap).map(country => ({
-                    country,
-                    count: userMap[country]
-                }));
-
-                console.log(chartData);
-                setUsers(chartData);
-            })
-            .catch(error => console.error('Error:', error));
+        
     }, []);
 
     return (
@@ -75,7 +87,7 @@ const BarChart = ({ isDashboard = false }) => {
             padding={0.3}
             valueScale={{ type: "linear" }}
             indexScale={{ type: "band", round: true }}
-            colors={{ scheme: 'dark2'}}
+            colors={{ scheme: 'dark2' }}
             defs={[
                 {
                     id: "dots",

@@ -3,7 +3,7 @@ import FormHobbies from "../hobbiesForm";
 import FormHobbiesUpdate from "../formUpdateHobbies";
 
 
-const ModalConfirm = ({open, handleClose,setHobbies, hobby, hobbies })=>{
+const ModalConfirm = ({open, handleClose,setHobbies, hobby, hobbies, authenticated })=>{
     return (
         <Modal
             open={open}
@@ -19,7 +19,7 @@ const ModalConfirm = ({open, handleClose,setHobbies, hobby, hobbies })=>{
                 boxShadow={24}
                 style={{ width: '80%', maxWidth: '600px' }}
             >
-                <FormHobbiesUpdate  handleClose={handleClose} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  />
+                <FormHobbiesUpdate  handleClose={handleClose} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies}  authenticated={authenticated}/>
             </Box>
         </Modal>
     );

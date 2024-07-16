@@ -8,7 +8,7 @@ const Bar = () => {
         <Box m="20px">
             <Header  title="Bar Chart" subtitle=""/>
             <Box height="75vh" >
-                <BarChart />
+                <BarChart  />
             </Box>
         </Box>
     )

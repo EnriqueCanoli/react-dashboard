@@ -2,7 +2,7 @@ import { Box, Modal } from "@mui/material";
 import FormHobbiesDelete from "../fomrDeleteHobbie";
 
 
-const ModalDelete = ({open, handleClose,setHobbies, hobby, hobbies})=>{
+const ModalDelete = ({open, handleClose,setHobbies, hobby, hobbies, authenticated})=>{
     return (
         <Modal
             open={open}
@@ -18,7 +18,7 @@ const ModalDelete = ({open, handleClose,setHobbies, hobby, hobbies})=>{
                 boxShadow={24}
                 style={{ width: '80%', maxWidth: '600px' }}
             >
-                <FormHobbiesDelete  handleClose={handleClose} setHobbies={setHobbies} hobby={hobby}  hobbies={hobbies} />
+                <FormHobbiesDelete  handleClose={handleClose} setHobbies={setHobbies} hobby={hobby}  hobbies={hobbies} authenticated={authenticated}/>
             </Box>
         </Modal>
     );
