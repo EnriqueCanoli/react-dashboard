@@ -4,6 +4,8 @@ import { tokens } from "../../theme";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Users = ({ authenticated }) => {
     const theme = useTheme();
@@ -57,7 +59,17 @@ const Users = ({ authenticated }) => {
 
             const result = await response.json();
 
-            alert(`User ${user.username} has been banned`)
+            toast.success(`User ${user.username} has been banned`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                });
+                
             setUsers((prevUsers) =>
                 prevUsers.map((u) => u.userId === userId ? { ...u, isBanned: true } : u
                 ))
@@ -178,6 +190,7 @@ const Users = ({ authenticated }) => {
                 }}>
                 <DataGrid rows={users} columns={columns} getRowId={(row) => row.userId} />
             </Box>
+            <ToastContainer />
         </Box>
     )
 

@@ -4,6 +4,8 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const initialValues = {
@@ -42,6 +44,9 @@ const checkoutSchema = yup.object().shape({
 });
 
 const Form = ({authenticated}) => {
+    
+
+
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const handleFormSubmit = async (values, {resetForm}) => {
@@ -67,7 +72,17 @@ const Form = ({authenticated}) => {
             if (!response.ok) {
                 throw new Error('Failed to create admin');
             }else{
-                alert("Admin has been created")
+                //alert("Admin has been created")
+                toast.success('Admin has been created', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    });
                 resetForm();  
             }
         }
@@ -213,6 +228,7 @@ const Form = ({authenticated}) => {
                     </form>
                 )}
             </Formik>
+            <ToastContainer />
         </Box>
     );
 };
