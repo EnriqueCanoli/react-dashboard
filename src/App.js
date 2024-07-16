@@ -60,13 +60,4 @@ function App() {
 
 export default App;
 
-/*
-{
-  "username": "admin",
-  "email": "admin@mailFake.com",
-  "password": "Secure17$",
-  "confirmPassword": "Secure17$",
-  "phone": 57605,
-  "country": "Colombia",
-  "city": "Bogotá"
-}*/
+
