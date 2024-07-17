@@ -164,3 +164,6 @@ const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies, authentica
 };
 
 export default FormHobbiesUpdate;
+
+
+

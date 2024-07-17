@@ -34,7 +34,8 @@ const FormHobbies = ({ handleClose, setHobbies,authenticated }) => {
             },
             body: JSON.stringify({
                 name: values.name,
-                emoji: values.emoji
+                emoji: values.emoji,
+                state:"approved"
             })
         });
 

@@ -8,10 +8,11 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import ModalAdd from "../../components/ModalAdd";
 import ModalConfirm from "../ModalConfirm";
 import ModalDelete from "../ModalDelete";
+import ModalAccept from "../ModalAccept";
 
 
 
-const Hobbies = ({authenticated}) => {
+const Hobbies = ({ authenticated }) => {
     console.log(authenticated.token)
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -26,7 +27,7 @@ const Hobbies = ({authenticated}) => {
     const [hobby, setHobby] = useState({})
 
     const handleOpenUpdate = (id) => {
-        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id); 
+        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id);
         setOpenModalUpdate(true)
         console.log("hobby: " + hobby.hobbieId)
         setHobby(hobby)
@@ -41,7 +42,7 @@ const Hobbies = ({authenticated}) => {
     const [openModalDelete, setOpenModalDelete] = useState(false);
 
     const handleOpenDelete = (id) => {
-        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id); 
+        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id);
         setOpenModalDelete(true)
         console.log("hobby: " + hobby.hobbieId)
         setHobby(hobby)
@@ -52,23 +53,75 @@ const Hobbies = ({authenticated}) => {
         setHobby({})
     }
 
-    
-    
+    /**approval */
+    const [openModalApproved, setOpenModalApproved] = useState(false);
+
+    const handleApproval = (id) => {
+        console.log("entro approve")
+        const hobby = hobbies.find(hobbie => hobbie.hobbieId === id);
+        setOpenModalApproved(true)
+        console.log("hobby: " + hobby.hobbieId)
+        setHobby(hobby)
+
+    }
+
+    const handleCloseApproval = () => {
+        setOpenModalApproved(false)
+        setHobby({})
+    }
+
+
+
 
     /**Hobbies state */
     const [hobbies, setHobbies] = useState([]);
 
     const columns = [
-        { field: "hobbieId", headerName: "ID", flex: 1, },
+        { field: "hobbieId", headerName: "ID",flex: 1, },
         {
             field: "name",
             headerName: "Name",
             flex: 1,
+            
         },
         {
             field: "emoji",
             headerName: "Emoji",
             flex: 1,
+        },
+        {
+            field: "approval",
+            headerName: "APPROVAL",
+            flex: 1,
+            renderCell: (params) => {
+                return (
+                    <Box
+                        width="40%"
+                        m="5px"
+                        p="5px"
+                        display="flex"
+                        justifyContent="center"
+                        backgroundColor={params.row.state === "pending"  ? colors.greenAccent[600] : undefined}
+                        borderRadius="4px"
+                        onClick={params.row.state === "pending"  ?  () => handleApproval(params.row.hobbieId) : undefined }
+                    >
+                        {params.row.state === "pending"  ? (
+                            <>
+                                <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+                                    CHECK
+                                </Typography>
+                            </>
+                        ) : (
+                            <>
+                                <Typography color={params.row.state === "approved" ? colors.greenAccent[600] : colors.redAccent[500]}>
+                                    {params.row.state.toUpperCase()}
+                                </Typography>
+                            </>
+                        )
+                        }
+                    </Box>
+                )
+            }
         },
         {
             field: "update",
@@ -82,9 +135,9 @@ const Hobbies = ({authenticated}) => {
                         p="5px"
                         display="flex"
                         justifyContent="center"
-                        backgroundColor={colors.blueAccent[600]}
+                        backgroundColor={params.row.state === "pending" || params.row.state === "denied" ? colors.grey[600] : colors.blueAccent[600]}
                         borderRadius="4px"
-                        onClick={()=>handleOpenUpdate(params.row.hobbieId)}
+                        onClick={params.row.state === "pending" || params.row.state === "denied" ? undefined : () => handleOpenUpdate(params.row.hobbieId)}
                     >
                         <SecurityOutlinedIcon />
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
@@ -92,6 +145,7 @@ const Hobbies = ({authenticated}) => {
                         </Typography>
                     </Box>
                 )
+
             }
         },
         {
@@ -106,9 +160,9 @@ const Hobbies = ({authenticated}) => {
                         p="5px"
                         display="flex"
                         justifyContent="center"
-                        backgroundColor={colors.redAccent[600]}
+                        backgroundColor={params.row.state === "pending" || params.row.state === "denied" ? colors.grey[600] : colors.redAccent[600]}
                         borderRadius="4px"
-                        onClick={()=>handleOpenDelete(params.row.hobbieId)}
+                        onClick={params.row.state === "pending"  || params.row.state === "denied" ? undefined : () => handleOpenDelete(params.row.hobbieId)}
                     >
                         <SecurityOutlinedIcon />
                         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
@@ -118,12 +172,15 @@ const Hobbies = ({authenticated}) => {
                 )
             }
         },
+        
+
+
 
     ];
 
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/hobbies',{
-            headers:{
+        fetch('https://backend-hobbify.onrender.com/hobbies', {
+            headers: {
                 'Authorization': `Bearer ${authenticated.token}`
             }
         })
@@ -134,7 +191,7 @@ const Hobbies = ({authenticated}) => {
             })
             .catch(error => console.error('Error:', error));
 
-        
+
     }, []);
 
     return (
@@ -189,7 +246,8 @@ const Hobbies = ({authenticated}) => {
             </Box>
             <ModalAdd handleClose={handleClose} open={open} setHobbies={setHobbies} authenticated={authenticated} />
             <ModalConfirm handleClose={handleCloseUpdate} open={openModalUpdate} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated} />
-            <ModalDelete handleClose={handleCloseDelete} open={openModalDelete} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated}  />
+            <ModalDelete handleClose={handleCloseDelete} open={openModalDelete} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated} />
+            <ModalAccept handleClose={handleCloseApproval} open={openModalApproved} setHobbies={setHobbies} hobby={hobby} hobbies={hobbies} authenticated={authenticated}/>
         </Box>
     );
 };
@@ -199,23 +257,6 @@ const Hobbies = ({authenticated}) => {
 
 
 export default Hobbies;
-
-
-/*
-[
-            { hobbieId: 3, name: "Football", emoji: "⚽️" },
-            { hobbieId: 4, name: "Playing Guitar", emoji: "🎸" },
-            { hobbieId: 5, name: "Reading Books", emoji: "📚" },
-            { hobbieId: 6, name: "Gaming", emoji: "🎮" },
-            { hobbieId: 7, name: "Cooking", emoji: "🍳" },
-            { hobbieId: 8, name: "Painting", emoji: "🎨" },
-            { hobbieId: 9, name: "Fishing", emoji: "🎣" },
-            { hobbieId: 10, name: "Singing", emoji: "🎤" },
-            { hobbieId: 11, name: "Weightlifting", emoji: "🏋️‍♂️" },
-            { hobbieId: 12, name: "Cycling", emoji: "🚴‍♂️" }
-        ]
-*/
-
 
 
 
