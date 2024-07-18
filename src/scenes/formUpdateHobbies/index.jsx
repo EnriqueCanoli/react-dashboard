@@ -33,7 +33,7 @@ const FormHobbiesUpdate = ({ handleClose, setHobbies, hobby, hobbies, authentica
     // Inside FormHobbies component, after successful POST request
     const handleFormSubmit = async (values) => {
         try {
-            const response = await fetch(`https://backend-hobbify.onrender.com/hobbies/${hobby.hobbieId}`, {
+            const response = await fetch(`https://c9knnnk6-3017.use2.devtunnels.ms/hobbies/${hobby.hobbieId}`, {
                 method: 'PUT',
                 headers: {
                     'accept': '*/*',

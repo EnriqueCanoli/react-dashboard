@@ -18,7 +18,7 @@ const FormHobbiesDelete = ({ handleClose, setHobbies, hobby, hobbies,authenticat
     // Inside FormHobbies component, after successful POST request
     const handleFormSubmit = async () => {
         try {
-            const response = await fetch(`https://backend-hobbify.onrender.com/hobbies/${hobby.hobbieId}`, {
+            const response = await fetch(`https://c9knnnk6-3017.use2.devtunnels.ms/hobbies/${hobby.hobbieId}`, {
                 method: 'DELETE',
                 headers: {
                     'accept': '*/*',

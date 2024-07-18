@@ -52,7 +52,7 @@ const Form = ({authenticated}) => {
     const handleFormSubmit = async (values, {resetForm}) => {
         console.log(values);
         try {
-            const response = await fetch('https://backend-hobbify.onrender.com/users/createAdmin', {
+            const response = await fetch('https://c9knnnk6-3017.use2.devtunnels.ms/users/createAdmin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

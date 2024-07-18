@@ -14,7 +14,7 @@ const Users = ({ authenticated }) => {
     const [users, setUsers] = useState([]);
     console.log("token " + authenticated.token)
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/users',{
+        fetch('https://c9knnnk6-3017.use2.devtunnels.ms/users',{
             headers:{
                 'Authorization': `Bearer ${authenticated.token}`
             }
@@ -30,7 +30,7 @@ const Users = ({ authenticated }) => {
     }, []);
 
     const handleBanned = async (userId) => {
-        const url = `https://backend-hobbify.onrender.com/users/${userId}/ban`;
+        const url = `https://c9knnnk6-3017.use2.devtunnels.ms/users/${userId}/ban`;
 
         //get the user
         const user = users.find((user) => user.userId === userId);

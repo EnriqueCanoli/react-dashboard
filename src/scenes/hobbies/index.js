@@ -179,7 +179,7 @@ const Hobbies = ({ authenticated }) => {
     ];
 
     useEffect(() => {
-        fetch('https://backend-hobbify.onrender.com/hobbies', {
+        fetch('https://c9knnnk6-3017.use2.devtunnels.ms/hobbies', {
             headers: {
                 'Authorization': `Bearer ${authenticated.token}`
             }
@@ -257,6 +257,5 @@ const Hobbies = ({ authenticated }) => {
 
 
 export default Hobbies;
-
 
 

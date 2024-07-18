@@ -15,7 +15,7 @@ const BarChart = ({ isDashboard = false }) => {
             const userData = localStorage.getItem("userSession");
             console.log("userData  " + JSON.parse(userData).token)
             if (userData) {
-                fetch('https://backend-hobbify.onrender.com/users', {
+                fetch('https://c9knnnk6-3017.use2.devtunnels.ms/users', {
                     headers: {
                         'Authorization': `Bearer ${JSON.parse(userData).token}`
                     }

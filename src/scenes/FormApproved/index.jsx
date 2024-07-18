@@ -11,7 +11,7 @@ const FormHobbiesApproved = ({ handleClose, setHobbies, hobby, hobbies,authentic
     // Inside FormHobbies component, after successful POST request
     const handleSumbit = async (approved) => {
         try {
-            const response = await fetch(`https://backend-hobbify.onrender.com/hobbies/${hobby.hobbieId}`, {
+            const response = await fetch(`https://c9knnnk6-3017.use2.devtunnels.ms/hobbies/${hobby.hobbieId}`, {
                 method: 'PUT',
                 headers: {
                     'accept': '*/*',

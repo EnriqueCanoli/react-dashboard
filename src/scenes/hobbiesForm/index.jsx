@@ -25,7 +25,7 @@ const FormHobbies = ({ handleClose, setHobbies,authenticated }) => {
     // Inside FormHobbies component, after successful POST request
     const handleFormSubmit = async (values) => {
     try {
-        const response = await fetch('https://backend-hobbify.onrender.com/hobbies', {
+        const response = await fetch('https://c9knnnk6-3017.use2.devtunnels.ms/hobbies', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
